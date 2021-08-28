@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import axios from 'axios';
+import api from '../../services/api';
 
-//import { Container, Content } from './style';
+import { Container, Erro, Form, Address, ProgressBar } from './styles';
 
 class BuscaCep extends Component {
 
@@ -15,27 +15,56 @@ class BuscaCep extends Component {
 
 		this.state = {
 			cep: '',
+			isCached: '',
 			address: '',
-			error: ''
+			error: '',
+			isLoading: false
 		}
 	}
 
 	componentDidMount(){
+		//Alterando o título da página no momento que o component montar
 		document.title = 'ViaCep - Buscar Cep';
 	}
 
+	//Função utilizada para sobrescer o script default do Formulário
 	handleSubmit(e) {
 		e.preventDefault();
 
-		axios.post("http://localhost:8000/cep/search", {cep: this.state.cep})
+		this.setState({
+			address: null,
+			isCached: null,
+			error: null,
+			isLoading: true
+		});
+
+		api.post("/cep/search", {cep: this.state.cep})
 			.then(response => {
-				this.setState({address: response.data.address});
+				if(response?.data?.address) {
+					this.setState({address: response.data.address});
+				}
+				if(response?.data?.isCached) {
+					this.setState({isCached: response.data.isCached});
+				}
+				if(response?.data?.message) {
+					this.setState({error: response.data.message});
+				}
 			})
 			.catch(error => {
-				this.setState({error: error.message});
+				if(error?.response?.data?.message) {
+					this.setState({error: error.response.data.message});
+				} else {
+					this.setState({error: error.message});
+				}
 			})
-	}
+			.finally(() => {
+				this.setState({
+					isLoading: false
+				});
+			});
+	};
 
+	//Função utilizada no onChange do Formulário para alterar o valor do state.cep
 	onChangeCep(e) {
 		this.setState({
 			cep: e.target.value
@@ -44,24 +73,44 @@ class BuscaCep extends Component {
 
 	render() {
 		return (
-			<div>
+			<Container>
 				<h1>Página de Busca de Ceps</h1>
 
 				{(this.state.error) && 
-                    <span style={{color: 'red'}}>{this.state.error}</span>
+                    <Erro>{this.state.error}</Erro>
                 }
 
-				<form onSubmit={this.handleSubmit}>
+				<Form onSubmit={this.handleSubmit}>
 					<input type="text" value={this.state.cep} onChange={this.onChangeCep}/>
 					<input type="submit" value="Buscar" />
-				</form>
+				</Form>
 
-				{(this.state.address) &&
-					<span>
-						{this.state.address.logradouro} / {this.state.address.uf}
-					</span>
+				{this.state.isLoading === true &&
+					<ProgressBar />
 				}
-			</div>
+
+				{(this.state.address && typeof this.state.address === 'object') &&
+					<Address>
+						<h2>Dados Recebidos</h2>
+						{this.state.isCached === true
+							?
+							<p>CEP já pesquisado e estava presente no cache!</p>
+							:
+							<p>CEP nunca pesquisado e foi adicionado no Cache!</p>
+						}
+						<table>
+							{Object.keys(this.state.address).map((key) => {
+							    return (
+							    	<tr key={key}>
+								    	<td align="right">{key}:</td>
+								    	<td>{this.state.address[key]}</td>
+							    	</tr>
+							    )
+							})}
+						</table>
+					</Address>
+				}
+			</Container>
 		)
 	}
 }
