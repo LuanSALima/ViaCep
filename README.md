@@ -7,7 +7,7 @@ Este projeto foi desenvolvido utilizando React.JS e Node.JS.
 ![Screenshot de 3 testes][screen-tests]
 
 # Front-end
-A aplicação web foi desenvolvido utilizando React.JS e possui 2 páginas, no qual a principal possui o campo para a digitar o cep que será consultado e a segunda página é retornada com uma mensagem de página não encontrada quando o usuário tentar acessar uma rota diferente da página inicial. A página principal foi estilizada utilizando o pacote ``styled-components`` e foi utilizado o pacote ``axios`` para realizar as requisições para o servidor backend que retornará o resultado da pesquisa pelo CEP digitado.
+A aplicação web foi desenvolvido utilizando React.JS e possui 2 páginas, no qual a principal possui o campo para a digitar o CEP que será consultado e a segunda página é retornada com uma mensagem de página não encontrada quando o usuário tentar acessar uma rota diferente da página inicial. A página principal foi estilizada utilizando o pacote ``styled-components`` e foi utilizado o pacote ``axios`` para realizar as requisições para o servidor backend que retornará o resultado da pesquisa pelo CEP digitado.
 
 # Back-end
 O servidor backend foi desenvolvido utilizando Node.JS e framework  ``Èxpress`` para desenvolver uma API Restful que possui 2 rotas, uma rota de teste e a rota principal ``POST`` que espera o valor do CEP. Para realizar o cache dos CEPs foi utilizado o banco de dados ``MONGODB``, que é um banco ``NOSQL`` e utilizado o pacote ``mongoose`` para criar a conexão e acesso ao banco de dados. Para enviar a requisição para a API ViaCEP foi utilizado o pacote ``axios``. Também foi utilizado o pacote ``jest`` para a criação dos testes e o pacote ``supertest`` para realizar os testes nas rotas.
@@ -15,7 +15,7 @@ O servidor backend foi desenvolvido utilizando Node.JS e framework  ``Èxpress``
 # Como rodar o projeto
 - É necessário ter:
     - Node.JS instalado: [Link para a página de download do Node.JS](https://nodejs.org/pt-br/download/)
-    - URI de conexão com o MongoDB: [Link para a página do oficial em inglês](https://docs.mongodb.com/manual/reference/connection-string/)
+    - URI de conexão com o MongoDB: [Link para a página do MongoDB oficial em inglês](https://docs.mongodb.com/manual/reference/connection-string/)
 
 - Passo a passo para rodar o projeto
     
@@ -28,12 +28,13 @@ O servidor backend foi desenvolvido utilizando Node.JS e framework  ``Èxpress``
         #Acesse a pasta do backend
         $ cd ./backend
         
-        #Crie um arquivo .env com o mesmo conteudo do arquivo .env.example e altere o valor da variável 'ATLAS_URI' para o valor da URI de conexão com o MongoDB
-        
+        #Crie um arquivo .env com o mesmo conteúdo do arquivo .env.example e altere o valor da variável 'ATLAS_URI' para o valor da URI de conexão com o MongoDB
+        $ cp .env.example .env
+
         #Instale os pacotes npm
         $ npm install
         ou
-        $ yarn add
+        $ yarn install
         
         #Execute o Projeto
         $ npm start
@@ -42,15 +43,16 @@ O servidor backend foi desenvolvido utilizando Node.JS e framework  ``Èxpress``
         ```
     - 3° Configurando e Instalando o Frontend
         ```
-        #Acesse a pasta do frontned
+        #Acesse a pasta do frontend
         $ cd ./frontend
         
-        #Crie um arquivo .env com o mesmo conteudo do arquivo .env.example
+        #Crie um arquivo .env com o mesmo conteúdo do arquivo .env.example
+        $ cp .env.example .env
         
         #Instale os pacotes npm
         $ npm install
         ou
-        $ yarn add
+        $ yarn install
         
         #Execute o Projeto
         $ npm start
